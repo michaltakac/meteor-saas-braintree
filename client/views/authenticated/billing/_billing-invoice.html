@@ -1,0 +1,57 @@
+<template name="billingInvoice">
+  <div class="panel panel-default billing-module">
+    <div class="panel-heading">
+      <h3 class="panel-title"><a href="{{pathFor 'billing'}}" class="text-muted">Billing</a> / Invoice / {{_id}}</h3>
+    </div>
+    <div class="panel-body">
+      <ul class="list-group">
+        <li class="list-group-item bm-block clearfix">
+          <span class="bm-block-label">Date</span>
+          <div class="bm-block-content">
+            <strong>{{niceBtDate date}}</strong>
+          </div>
+        </li>
+        <li class="list-group-item bm-block clearfix">
+          <span class="bm-block-label">Account billed</span>
+          <div class="bm-block-content">
+            <strong>{{email}}</strong>
+          </div>
+        </li>
+        <li class="list-group-item bm-block clearfix">
+          <span class="bm-block-label">Plan</span>
+          <div class="bm-block-content">
+            <strong>{{capitalize planId}}</strong> (ends on {{niceBtDate ends}})
+          </div>
+        </li>
+        <li class="list-group-item bm-block clearfix">
+          <span class="bm-block-label">Amount charged</span>
+          <div class="bm-block-content">
+            <strong>USD {{addDollarSign amount}}</strong>
+          </div>
+        </li>
+        <li class="list-group-item bm-block clearfix">
+          <span class="bm-block-label">Transaction ID</span>
+          <div class="bm-block-content">
+            <strong>{{transactionId}}</strong>
+          </div>
+        </li>
+        <li class="list-group-item bm-block clearfix">
+          <span class="bm-block-label">Billed by</span>
+          <div class="bm-block-content">
+            <span><strong>Todoodle</strong></span>
+            <span>123 Floozle St.</span>
+            <span>Skaploozle, NY 10001</span>
+            <span>United States</span>
+          </div>
+        </li>
+        <li class="list-group-item bm-block clearfix">
+          <span class="bm-block-label">Support</span>
+          <div class="bm-block-content">
+            <span><a href="#">support@todoodle.com</a></span>
+            <span><a href="#">http://todoodle.com/help</a></span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>

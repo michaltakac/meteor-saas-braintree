@@ -1,0 +1,34 @@
+<template name="signup">
+  <div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5">
+      <h3 class="page-header">Start Slaying Tasks</h3>
+      <p>Signup for <strong>Todoodle</strong> today and start dropkicking your todo list into the stratosphere. To get started, hit us up with an Email Address, Password, and your credit card details.</p>
+      <form id="application-signup" class="signup">
+        <h4 class="page-header">Account details</h4>
+        <div class="form-group">
+          <label for="fullName">Full Name</label>
+          <input type="text" name="fullName" class="form-control" placeholder="Full Name">
+        </div> <!-- end .form-group -->
+        <div class="form-group">
+          <label for="emailAddress">Email Address</label>
+          <input type="email" name="emailAddress" class="form-control" placeholder="Email Address">
+        </div> <!-- end .form-group -->
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" name="password" class="form-control" placeholder="Password">
+        </div> <!-- end .form-group -->
+        <h4 class="page-header">Payment Information</h4>
+        <label>Which plan sounds <em>amazing</em>?</label>
+        {{>selectPlan}}
+        <p class="alert alert-info"><strong>Jokes aside:</strong> to test out the credit card form, you can use the card number <strong>4242 4242 4242 4242 along with any future expiration month, year, and CVV + postal code (ZIP)</strong>. You'll receive an email from Todoodle confirming the to showcase Braintree in action.</p>
+        <div class="form-group">
+          {{> Template.dynamic template="creditCard" data="signup"}}
+        </div>
+        <div class="form-group">
+          <input type="submit" class="btn btn-success btn-block" data-loading-text="Setting up your trial..." style="margin-top: 40px; margin-bottom: 20px;" value="Put me on the rocketship">
+          <p>After you click, we'll setup your account. <strong>Your card will be charged immediately</strong>.</p>
+        </div> <!-- end .form-group -->
+      </form>
+    </div> <!-- end .col-xs-12 -->
+  </div> <!-- end .row -->
+</template>

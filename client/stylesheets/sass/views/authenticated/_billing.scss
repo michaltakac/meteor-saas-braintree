@@ -1,0 +1,84 @@
+.billing-module.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.billing-module .panel-body .list-group,
+.billing-module .panel-body table {
+  margin-bottom: 0px;
+}
+
+.billing-module {
+  .list-group-item-info,
+  .list-group-item-success,
+  .list-group-item-warning,
+  .list-group-item-danger {
+    p { margin: 0; }
+    a { text-decoration: underline; }
+  }
+
+  .list-group-item-success a {
+    color: #3c763d;
+  }
+
+  .list-group-item-warning a {
+    color: #8a6d3b;
+  }
+
+  .list-group-item-danger a {
+    color: #a94442;
+  }
+
+  .list-group-item-info a {
+    color: #31708f;
+  }
+}
+
+.bm-block-label {
+  float: left;
+  display: block;
+  width: 15%;
+  color: #888;
+}
+
+.bm-block-content {
+  float: left;
+  display: block;
+  width: 50%;
+
+  span {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  span:last-child {
+    margin-bottom: 0px;
+  }
+}
+
+.usage-bar {
+  position: relative;
+  height: 5px;
+  background: #eee;
+
+  .used {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 5px;
+    background: #aaa;
+  }
+}
+
+.bm-block .plan {
+  margin-top: 7px;
+}
+
+.alert {
+  margin-bottom: 10px;
+}
+
+.cancel-new-card {
+  display: block;
+  margin-top: 5px;
+}

@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "braintree-web": {
+      "version": "2.7.1"
+    }
+  }
+}

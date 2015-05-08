@@ -1,0 +1,35 @@
+<template name="billingPaymentHistory">
+  <div class="panel panel-default billing-module">
+    <div class="panel-heading">
+      <h3 class="panel-title">Payment History</h3>
+    </div>
+    <div class="panel-body">
+      {{#if hasInvoices}}
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Plan</th>
+            <th>Amount</th>
+            <th>Invoice</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each invoices}}
+            <tr>
+              <td>{{transactionId}}</td>
+              <td>{{niceBtDate date}}</td>
+              <td>{{capitalize planId}}</td>
+              <td>{{addDollarSign amount}}</td>
+              <td><a href="{{pathFor 'billingInvoice'}}" class="text-success">View Invoice</a></td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+      {{else}}
+        <p class="alert alert-info" style="margin: 0;">You don't have any invoices yet!</p>
+      {{/if}}
+    </div>
+  </div>
+</template>
