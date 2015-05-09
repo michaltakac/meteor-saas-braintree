@@ -3,10 +3,12 @@
 * Server-side routes for receiving data from third-party services.
 */
 
+// https://github.com/iron-meteor/iron-router/issues/1003
 Router.onBeforeAction(Iron.Router.bodyParser.urlencoded({
     extended: false
 }));
 
+// Setting up Braintree
 var gateway;
 
 Meteor.startup(function () {
@@ -26,16 +28,11 @@ Router.route('/webhooks/braintree', {where: 'server'})
     // https://developers.braintreepayments.com/javascript+node/guides/webhooks/create
     var bt_challenge = "";
 
-    // When you attempt to create a new webhook, Braintree servers will make a GET request 
-    // to the provided URL with a query param named bt_challenge. This query param 
-    // should be passed to the gateway.webhookNotification.verify. The result of calling 
-    // this method should be returned as the body of the response. Our site must parse and respond 
-    // to this verification request before Braintree will send webhooks to our destination URL.
     res.statusCode = 200;
     res.end(gateway.webhookNotification.verify(req.query.bt_challenge));
   })
   .post(function (req, res) {
-
+    
     var btSignatureParam = req.body.bt_signature;
     var btPayloadParam   = req.body.bt_payload;
 
@@ -50,18 +47,18 @@ Router.route('/webhooks/braintree', {where: 'server'})
             // TODO: Function below needs testing.
             // btUpdateSubscription(webhookNotification.subscription);
 
-            // Send HTTP 200 status code from webhook to let Braintree know
-            // that we received
+            // Send HTTP 200 status code to let Braintree know
+            // that we received webhook notification
             res.statusCode = 200;
-            res.end(200);
+            res.end("Hi Braintree!");
             break;
           case "subscription_charged_successfully":
             btCreateInvoice(webhookNotification.subscription);
 
-            // Send HTTP 200 status code from webhook to let Braintree know
-            // that we received
+            // Send HTTP 200 status code to let Braintree know
+            // that we received webhook notification
             res.statusCode = 200;
-            res.end(200);
+            res.end("Hi Braintree!");
             break;
         }
 
@@ -69,6 +66,6 @@ Router.route('/webhooks/braintree', {where: 'server'})
     );
 
     res.statusCode = 200;
-    res.end(200);
+    res.end("Hi Braintree!");
   });
 
