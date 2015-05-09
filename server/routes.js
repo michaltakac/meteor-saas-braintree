@@ -43,7 +43,7 @@ Router.route('/webhooks/braintree', {where: 'server'})
         console.log("[Webhook Received " + webhookNotification.timestamp + "] | Kind: " + webhookNotification.kind + " | Subscription: " + webhookNotification.subscription.id);
 
         switch(webhookNotification.kind){
-          case "subscription_went_past_due":
+          case "subscription_canceled":
             // TODO: Function below needs testing.
             // btUpdateSubscription(webhookNotification.subscription);
 
