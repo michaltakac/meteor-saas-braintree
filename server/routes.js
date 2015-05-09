@@ -44,15 +44,24 @@ Router.route('/webhooks/braintree', {where: 'server'})
       btPayloadParam,
       function (err, webhookNotification) {
         console.log("[Webhook Received " + webhookNotification.timestamp + "] | Kind: " + webhookNotification.kind + " | Subscription: " + webhookNotification.subscription.id);
-        console.log()
 
         switch(webhookNotification.kind){
           case "subscription_went_past_due":
-            console.log(Object.keys(webhookNotification.subscription));
+            // TODO: Function below needs testing.
             // btUpdateSubscription(webhookNotification.subscription);
+
+            // Send HTTP 200 status code from webhook to let Braintree know
+            // that we received
+            res.statusCode = 200;
+            res.end(200);
             break;
           case "subscription_charged_successfully":
             btCreateInvoice(webhookNotification.subscription);
+
+            // Send HTTP 200 status code from webhook to let Braintree know
+            // that we received
+            res.statusCode = 200;
+            res.end(200);
             break;
         }
 
