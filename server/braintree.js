@@ -9,6 +9,7 @@
 var gateway;
 
 Meteor.startup(function () {
+  // Setting up Braintree
   var braintree = Meteor.npmRequire('braintree');
   gateway = braintree.connect({
     environment: braintree.Environment.Sandbox,
@@ -52,11 +53,6 @@ Meteor.methods({
     var btCustomer = new Future();
 
     // If all is well, call to the Braintree API to create our customer!
-    // Note: here, we're passing a card as well. Why? Because we're only creating
-    // customers when they sign up for our app, Braintree gives us the option to pass
-    // card data here, automating the token creation process. We could
-    // run a separate stripeCreateToken method and pass the token to
-    // this method, but this saves us a step. Efficient!
     gateway.customer.create(customerRequest, function(error, result){
       if (error){
         btCustomer.return(error);
@@ -103,20 +99,19 @@ Meteor.methods({
     // return a value to it.
     var btSubscription = new Future();
 
+    // First, we'll fetch our customer data.
     Meteor.call('btFindCustomer', customerId, function(error, result) {
       if (error) {
         btSubscription.return(error);
       } else {
-
+        // Storing paymentMethodToken and plan name (id) in variable which we 
+        // will use for creating subscription.
         var subscriptionRequest = {
           paymentMethodToken: result.creditCards[0].token,
           planId: plan
         };
 
-        // If all is well, call to the Braintree API to create our subscription!
-        // Note: here, we're only passing the customerId (created by Braintree) and the
-        // name of the plan (the plan name will match an ID we set in the dashboard, 
-        // equal to the lowercase name of the plan).
+        // If all is well, we'll use Braintree API to create our subscription!
         gateway.subscription.create(subscriptionRequest, function(error, result) {
           if (error) {
             btSubscription.return(error);
@@ -141,7 +136,7 @@ Meteor.methods({
     // return a value to it.
     var btSubscription = new Future();
 
-    // If all is well, call to the Braintree API to find our customer!
+    // If all is well, we'll Braintree API to find our customer!
     gateway.subscription.find(subscriptionId, function(error, result) {
       if (error) {
         btSubscription.return(error);
@@ -164,16 +159,14 @@ Meteor.methods({
     // return a value to it.
     var btUserSubscription = new Future();
 
-    // If all is well, call to the Braintree API to find our customer!
+    // If all is well, we'll use Braintree API to find our customer!
     gateway.customer.find(customerId, function(error, result) {
       if (error) {
         btUserSubscription.return(error);
       } else {
-        // We retrieve customer's subscription here.
+        // We retrieve customer's last subscription here.
         var subscriptionId = result.paymentMethods[0].subscriptions;
         var last = subscriptionId.slice(-1)[0];
-        console.log(subscriptionId[subscriptionId.length-1]);
-        console.log(last);
 
         btUserSubscription.return(last);
       }
@@ -183,16 +176,13 @@ Meteor.methods({
   },
 
   btUpdateSubscription: function(plan){
-    // Check our arguments against their expected patterns. This is especially
-    // important here because we're dealing with sensitive customer information.
+    // Check our arguments against their expected patterns. 
     check(plan, String);
 
     // Because Braintree's API is asynchronous (meaning it doesn't block our function
     // from running once it's started), we need to make use of the Fibers/Future
     // library. This allows us to create a return object that "waits" for us to
-    // return a value to it. Yes, we could use Meteor.wrapAsync to simplify our code
-    // a bit, but I've choosen to demonstrate this here so we can better see *how*
-    // the function is responding. Put down that pitchfork.
+    // return a value to it.
     var btUpdateSubscription = new Future();
 
     // Before we jump into everything, we need to get our customer's ID. Recall
@@ -209,15 +199,11 @@ Meteor.methods({
     var limit          = currentPlan.limit;
     var price          = currentPlan.price;
 
-    // And then we pass our update over to our updateUserPlan method.
     Meteor.call('btFindUserSubscription', getUser.customerId, function(error, customerSubscription){
       if (error){
         btUpdateSubscription.return(error);
       } else {
-        console.log(customerSubscription.updatedAt);
-        // If all is well, call to the Braintree API to update our subscription! Note:
-        // here we have to pass *both* the ID of the customer and the ID of their
-        // subscription in order for this to work.
+        // If all is well, call to the Braintree API to update our subscription! 
         gateway.subscription.update(customerSubscription.id, {
           planId: plan,
           price: price
@@ -226,14 +212,14 @@ Meteor.methods({
             btUpdateSubscription.return(error);
           } else {
 
+            // We successfully updated subscription on Braintree servers, but we need to update user
+            // plan inside our database on server too! First we should find user's subscription here:
             gateway.subscription.find(customerSubscription.id, function(error, updatedSubscription) {
               if (error){
                 btUpdateSubscription.return(error);
               } else {
 
-                // Here, we know that updating our user's subscription will *only* be used
-                // to manage plan's, so, we run our user update method here to keep things simple.
-                // First we create our update object (don't forget SERVER_AUTH_TOKEN)...
+                // Second we create our update object (don't forget SERVER_AUTH_TOKEN)...
                 // Note: we're using a Fiber() here because we're calling to Meteor code from
                 // within another function's callback (without this Meteor will throw an error).
                 Fiber(function(){
@@ -272,7 +258,7 @@ Meteor.methods({
       expYear: String,
     });
 
-    // Because Stripe's API is asynchronous (meaning it doesn't block our function
+    // Because Braintree's API is asynchronous (meaning it doesn't block our function
     // from running once it's started), we need to make use of the Fibers/Future
     // library. This allows us to create a return object that "waits" for us to
     // return a value to it.
@@ -285,10 +271,10 @@ Meteor.methods({
     var user    = Meteor.userId();
     var getUser = Meteor.users.findOne({"_id": user}, {fields: {"customerId": 1}});
 
-    // Because we're not storing our user's card ID, we need to call Stripe first to
+    // Because we're not storing our user's card ID, we need to call Braintree first to
     // retrieve that information before we perform the update. This is key, because
-    // without it, Stripe won't know which card to update. Once we have this info,
-    // we call to Stripe *again* to update our customer's profile.
+    // without it, Braintree won't know which card to update. Once we have this info,
+    // we call to Braintree *again* to update our customer's profile.
     Meteor.call('btFindCustomer', getUser.customerId, function(error, response){
       if (error){
         btUpdateCard.return(error);
@@ -305,7 +291,7 @@ Meteor.methods({
           }
         };
 
-        // If all is well, call to the Stripe API to update our card!
+        // If all is well, call to the Braintree API to update our card!
         gateway.customer.update(getUser.customerId, updateRequest, function(error, customer){
           if (error) {
             btUpdateCard.return(error);
@@ -332,7 +318,7 @@ Meteor.methods({
       }
     });
 
-    // Because Stripe's API is asynchronous (meaning it doesn't block our function
+    // Because Braintree's API is asynchronous (meaning it doesn't block our function
     // from running once it's started), we need to make use of the Fibers/Future
     // library. This allows us to create a return object that "waits" for us to
     // return a value to it.
@@ -365,7 +351,7 @@ Meteor.methods({
           }
         };
 
-        // If all is well, call to the Stripe API to update our card!
+        // If all is well, call to the Braintree API to update our card!
         gateway.customer.update(getUser.customerId, updateRequest, function(error, updateResponse){
           if (error) {
             btSwapCard.return(error);
@@ -376,7 +362,7 @@ Meteor.methods({
             }
             // Because we're running Meteor code inside of an async callback, we need to wrap
             // it in a Fiber. Note: this is a verbose way of doing this. You could refactor this
-            // and the call to Stripe to use a Meteor.wrapAsync method instead. The difference is
+            // and the call to Braintree to use a Meteor.wrapAsync method instead. The difference is
             // that while wrapAsync is cleaner syntax-wise, it can be a bit confusing.
             Fiber(function(){
               var update = {
@@ -402,7 +388,7 @@ Meteor.methods({
   },
 
   btCancelSubscription: function(){
-    // Because Stripe's API is asynchronous (meaning it doesn't block our function
+    // Because Braintree's API is asynchronous (meaning it doesn't block our function
     // from running once it's started), we need to make use of the Fibers/Future
     // library. This allows us to create a return object that "waits" for us to
     // return a value to it.
@@ -419,18 +405,13 @@ Meteor.methods({
       if (error){
         btUpdateSubscription.return(error);
       } else {
-        // Once we have our customerId, call to Stripe to cancel the active subscription.
+        // Once we have our customerId, call to Braintree to cancel the active subscription.
         gateway.subscription.cancel(customerSubscription.id, function(error, result){
           if (error) {
-            console.log("nepodarilo sa cancelnut :(");
             btCancelSubscription.return(error);
           } else {
-            console.log("podarilo sa cancelnut v braintree serveri :)");
             // Because we're running Meteor code inside of another function's callback, we need to wrap
-            // it in a Fiber. Note: this is a verbose way of doing this. You could refactor this
-            // and the call to Stripe to use a Meteor.wrapAsync method instead. The difference is
-            // that while wrapAsync is cleaner syntax-wise, it can be a bit confusing. To keep
-            // things simple, we'll stick with a Fiber here.
+            // it in a Fiber. 
             Fiber(function(){
               var update = {
                 auth: SERVER_AUTH_TOKEN,
@@ -440,7 +421,7 @@ Meteor.methods({
                   ends: customerSubscription.paidThroughDate
                 }
               }
-
+              // And then we pass our update over to our updateUserSubscription method.
               Meteor.call('updateUserSubscription', update, function(error, response){
                 if (error){
                   btCancelSubscription.return(error);
@@ -487,9 +468,6 @@ Meteor.methods({
           if (error) {
             btResubscribe.return(error);
           } else {
-            console.log("created new sub after resubscribing!");
-            console.log(result);
-            console.log(result.subscription);
             Fiber(function(){
               var update = {
                 auth: SERVER_AUTH_TOKEN,
@@ -498,7 +476,6 @@ Meteor.methods({
                 status: result.subscription.status,
                 date: result.subscription.nextBillingDate
               }
-              console.log(update.status);
               // And then we pass our update over to our updateUserPlan method.
               Meteor.call('updateUserPlan', update, function(error, updateResponse){
                 if (error){

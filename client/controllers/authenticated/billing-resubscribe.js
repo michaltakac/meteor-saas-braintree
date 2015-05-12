@@ -82,7 +82,7 @@ Template.billingResubscribe.rendered = function(){
           }
         };
 
-        // Call our stripeSwipeCard method to replace our customer's existing
+        // Call our btSwipeCard method to replace our customer's existing
         // card with the new card they've specified.
         Meteor.call("btSwapCard", card, function(error, response){
           if (error){

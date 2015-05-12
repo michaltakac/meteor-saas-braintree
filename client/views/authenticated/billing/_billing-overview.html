@@ -8,8 +8,8 @@
         <!--
           We just map out each type here so we don't have a bunch of tangled state.
           Wire this up as you see fit. Just make sure to account for each status type you need :)
-          See: https://stripe.com/docs/api#subscription_object.
         -->
+        <!-- TODO: change Trialing to real trial status provided by Braintree, needs subscription testing -->
         {{#if equals plan.subscription.status "Trialing"}}
           <li class="list-group-item list-group-item-info">
             <p>You're trialing Todoodle until {{niceBtDate plan.subscription.ends}}. <a href="#" class="cancel-subscription">Cancel Subscription</a>.</p>

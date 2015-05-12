@@ -24,11 +24,11 @@ Meteor.methods({
       }
     });
 
-    // Before we send anything to Stripe, we should verify that our user doesn't
+    // Before we send anything to Braintree, we should verify that our user doesn't
     // exist in our database. We do this here because we technically won't create
-    // our user until AFTER we've created them on Stripe. To avoid duplicate customers
-    // on Stripe, we can check to see if they exist in our database first. If they
-    // don't, we know that they don't exist on Stripe either. Make sure to use a
+    // our user until AFTER we've created them on Braintree. To avoid duplicate customers
+    // on Braintree, we can check to see if they exist in our database first. If they
+    // don't, we know that they don't exist on Braintree either. Make sure to use a
     // RegExp (regular expression) object to match any case.
     var emailRegex     = new RegExp(customer.emailAddress, "i");
     var lookupCustomer = Meteor.users.findOne({"emails.address": emailRegex});
@@ -50,8 +50,8 @@ Meteor.methods({
             if (error) {
               console.log(error);
             } else {
-              // Once Stripe is all setup, create our user in the application, adding all
-              // of the Stripe data we just received. Note: the third parameter being passed
+              // Once Braintree is all setup, create our user in the application, adding all
+              // of the Braintree data we just received. Note: the third parameter being passed
               // is the "profile" data we want to set for the customer. Note: here we're using
               // a try/catch statement because Accounts.createUser does NOT accept a callback
               // on the server. This was if we run into an error, we can still grab it and

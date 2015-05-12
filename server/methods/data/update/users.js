@@ -66,7 +66,7 @@ Meteor.methods({
     check(update, {auth: String, user: String, card: {lastFour: String, type: String}});
 
     // Here, we need to create a new Future because we'll be returning this information back to
-    // our Stripe method. Note, we're mostly doing this because we're "blocking" the return of our
+    // our Braintree method. Note, we're mostly doing this because we're "blocking" the return of our
     // update method below in order to check the security of our method call. Certainly a trade-off,
     // but considering it nets us an extra touch of security, not that bad.
     var updateUserCard = new Future();
@@ -97,7 +97,7 @@ Meteor.methods({
     check(update, {auth: String, user: String, subscription: {status: String, ends: String}});
 
     // Here, we need to create a new Future because we'll be returning this information back to
-    // our Stripe method. Note, we're mostly doing this because we're "blocking" the return of our
+    // our Braintree method. Note, we're mostly doing this because we're "blocking" the return of our
     // update method below in order to check the security of our method call. Certainly a trade-off,
     // but considering it nets us an extra touch of security, not that bad.
     var updateUserSubscription = new Future();

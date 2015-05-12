@@ -27,7 +27,8 @@ SERVER_AUTH_TOKEN = Random.secret();
 // Create an array of user accounts.
 var users = [
 // Note: our demo user here is purely for mock purposes and does not correspond
-// to a real customer on Stripe.
+// to a real customer on Braintree. For real testing, you should create your own test account
+// normally by registering it from front-end.
   {
     name: "Andy Warhol",
     email: "andy@warhol.com",
@@ -42,7 +43,7 @@ var users = [
           type: "Visa",
           lastFour: "1111"
         },
-        nextPaymentDue: ( new Date() ).getTime()
+        nextPaymentDue: "2050-01-01"
       }
     },
     customerId: "13951jfoijf13oij"
