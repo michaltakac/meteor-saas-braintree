@@ -24,16 +24,7 @@ Template.selectPlan.rendered = function(){
 Template.selectPlan.helpers({
   plans: function(){
     var getPlans = Meteor.settings.public.plans;
-    var userId   = Meteor.userId();
-
-    var todos = TodoLists.find({owner: userId}).fetch();
-
-    // If user has more than 5 todos created and cancels subscription,
-    // he can only resubscribe for higher tier subscription until he
-    // cuts todos count to 5.
-    if (todos.length > 5) {
-      return _.where(getPlans, {limit: 15});
-    } else {
+    if (getPlans) {
       return getPlans;
     }
   }
