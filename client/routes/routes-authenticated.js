@@ -90,6 +90,12 @@ Router.route('billingInvoice', {
 Router.route('billingResubscribe', {
   path: '/billing/resubscribe',
   template: 'billingResubscribe',
+  subscriptions: function(){
+    var subs = [
+      Meteor.subscribe('userLists')
+    ]
+    return subs;
+  },
   onBeforeAction: function(){
     Session.set('addingNewCreditCard', false);
     Session.set('currentRoute', 'billing');
