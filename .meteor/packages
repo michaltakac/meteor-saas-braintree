@@ -14,7 +14,7 @@ audit-argument-checks
 iron:router
 cmather:handlebars-server
 themeteorchef:jquery-validation
-particle4dev:sass@0.3.0
+fourseven:scss
 twbs:bootstrap
 random
 meteorhacks:npm
