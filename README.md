@@ -2,7 +2,7 @@ MeteorJS + Braintree = SaaS
 ---
 
 A subscription-based app (SaaS) example that shows one way of integrating Braintree into your meteor application.
-[Try it here!](http://saas-braintree.meteor.com)
+[Try it here!](https://meteor-saas-braintree.herokuapp.com/)
 
 ### Disclaimer
 
