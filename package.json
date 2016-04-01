@@ -1,0 +1,22 @@
+{
+  "name": "meteor-saas-braintree",
+  "authors": [
+    "Michal Takac"
+  ],
+  "version": "2.0.0",
+  "description": "A subscription-based app (SaaS) example that shows one way of integrating Braintree.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/michaltakac/meteor-saas-braintree"
+  },
+  "license": "MIT",
+  "scripts": {
+    "start-app": "meteor --settings settings.json"
+  },
+  "dependencies": {
+
+  },
+  "devDependencies": {
+
+  }
+}

@@ -93,3 +93,21 @@ for(i=0; i < users.length; i++){
     }
   }
 }
+
+// Initialize Braintree 
+Meteor.startup(function () {
+  var env;
+  // Pick Braintree environment based on environment defined in Meteor settings.
+  if (Meteor.settings.public.env === 'Production') {
+    env = Braintree.Environment.Production;
+  } else {
+    env = Braintree.Environment.Sandbox;
+  }
+  // Initialize Braintree connection:
+  gateway = BrainTreeConnect({
+    environment: env,
+    publicKey: Meteor.settings.public.braintree.BT_PUBLIC_KEY,
+    privateKey: Meteor.settings.private.braintree.BT_PRIVATE_KEY,
+    merchantId: Meteor.settings.public.braintree.BT_MERCHANT_ID
+  });
+});

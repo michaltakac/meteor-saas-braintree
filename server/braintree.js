@@ -6,19 +6,6 @@
 * once, while reusing them multiple times in our application. Sweet!
 */
 
-var gateway;
-
-Meteor.startup(function () {
-  // Setting up Braintree
-  var braintree = Meteor.npmRequire('braintree');
-  gateway = braintree.connect({
-    environment: braintree.Environment.Sandbox,
-    publicKey: Meteor.settings.public.braintree.BT_PUBLIC_KEY,
-    privateKey: Meteor.settings.private.braintree.BT_PRIVATE_KEY,
-    merchantId: Meteor.settings.public.braintree.BT_MERCHANT_ID
-  });
-});
-
 var Future = Npm.require('fibers/future');
 var Fiber  = Npm.require('fibers');
 

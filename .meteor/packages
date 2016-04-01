@@ -5,23 +5,23 @@
 # but you can also edit it by hand.
 
 standard-app-packages
+standard-minifier-css
+standard-minifier-js
 underscore
 accounts-password
 accounts-base
 jquery
 check
+random
 audit-argument-checks
 iron:router
 cmather:handlebars-server
 themeteorchef:jquery-validation
 fourseven:scss
+fortawesome:fontawesome
 twbs:bootstrap
-random
-meteorhacks:npm
-
-nicktomlin:braintree-example
-npm-container
 momentjs:moment
 themeteorchef:bert
+patrickml:braintree
 
 msavin:mongol
