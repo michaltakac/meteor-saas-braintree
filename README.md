@@ -30,12 +30,11 @@ $ npm run start-app
 ```
 ### Invoices
 
-Invoices only works if you deploy your app on the web, because they are generated using Braintree's webhooks. There is a easy way to make it work:
+Invoices only works if you deploy your app on the web, because they are generated using Braintree's webhooks. You can test it on Heroku for free:
 
-1. Deploy your app to Meteor servers, for example: 
-`meteor deploy my-saas-app.meteor.com --settings settings.json`
+1. Deploy your app to Heroku servers by following this article - http://justmeteor.com/blog/deploy-to-production-on-heroku/ - IMPORTANT! Since this is Meteor 1.3, you need to use different buildpack, you can use mine: https://github.com/michaltakac/meteor-buildpack-horse 
 2. Inside Braintree sandbox, navigate to Settings > Webhooks (inside top menu)
-3. Click on `New webhook`, insert `my-saas-app.meteor.com/webhooks/braintree` URL into "Destination", check "Subscription canceled" and "Subscription charged successfully" and click `Create Webhook`
+3. Click on `New webhook`, insert `https://your-deployed-app.herokuapp.com/webhooks/braintree` URL into "Destination", check "Subscription canceled" and "Subscription charged successfully" and click `Create Webhook`
 4. It should be added now and after you create new subscription inside your app at `my-saas-app.meteor.com`, it will generate new invoice
 
 ### Issues?
