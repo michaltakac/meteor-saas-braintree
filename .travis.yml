@@ -1,0 +1,17 @@
+sudo: required
+language: node_js
+
+node_js:
+  - "0.10"
+
+before_install:
+  - curl https://install.meteor.com | /bin/sh
+  - npm install
+
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - npm install -g phantomjs
+
+script:
+  - JASMINE_BROWSER=Firefox JASMINE_CLIENT_UNIT=1 JASMINE_CLIENT_INTEGRATION=0 JASMINE_SERVER_UNIT=1 JASMINE_SERVER_INTEGRATION=0 meteor --test --once
